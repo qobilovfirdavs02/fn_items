@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS items (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    description VARCHAR(200),
+    price INTEGER NOT NULL,
+    on_offer BOOLEAN DEFAULT FALSE
+);

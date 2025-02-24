@@ -1,0 +1,51 @@
+# General
+.DS_Store
+Thumbs.db
+.env
+.env.local
+
+# Python (FastAPI)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.virtualenv/
+instance/
+database.sqlite3
+db.sqlite3
+alembic/
+migrations/
+
+# Node.js (Next.js)
+node_modules/
+.next/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Docker
+*.container
+docker-compose.override.yml
+docker-compose.override.yaml
+docker-compose.dev.yml
+docker-compose.dev.yaml
+.env.docker
+.env.docker.local
+docker-data/
+postgres_data/
+
+# VS Code
+.vscode/
+.history/
+*.code-workspace
+
+# JetBrains (PyCharm, WebStorm)
+.idea/
+*.iml
+
+# Logs & temp files
+logs/
+*.log
+nohup.out

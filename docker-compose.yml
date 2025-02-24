@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./back/init.sql:/docker-entrypoint-initdb.d/init.sql  # Tuzatildi
+    networks:
+      - app-network
+
+  fastapi:
+    build: ./back
+    container_name: fastapi_app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgresql://myuser:mypassword@postgres:5432/mydatabase
+    networks:
+      - app-network
+
+  nextjs:
+    build: ./nextjs
+    container_name: nextjs_app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - fastapi
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

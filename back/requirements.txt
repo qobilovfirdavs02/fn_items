@@ -1,0 +1,6 @@
+pymysql
+fastapi
+uvicorn
+pytest
+psycopg2-binary
+alembic
