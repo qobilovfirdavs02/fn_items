@@ -1,4 +1,8 @@
-from back.schemas import Item
+import pytest
+from fastapi.testclient import TestClient
+from main import app  # main.py dan FastAPI app obyektini import qilish
+
+client = TestClient(app)
 
 def test_create_item(client):
     response = client.post(
