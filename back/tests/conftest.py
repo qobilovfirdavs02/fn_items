@@ -1,14 +1,21 @@
 import pytest
+import os
+import sys
+
+# back papkasini PYTHONPATH’ga qo‘shish
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from back.database import Base, get_db
-from back.main import app
+from database import Base, get_db  # "back." prefiksi olib tashlandi
+from main import app  # "back." prefiksi olib tashlandi
 from fastapi.testclient import TestClient
 
 # Test uchun vaqtinchalik database yaratamiz
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"  # Yoki PostgreSQL: postgresql://user:pass@localhost/test_db
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://myuser:mypassword@postgres:5432/mydatabase")
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+# SQLAlchemy engine sozlamasi
+engine = create_engine(DATABASE_URL)  # SQLite uchun "check_same_thread" shart emas, PostgreSQL uchun olib tashlandi
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 @pytest.fixture(scope="function")
