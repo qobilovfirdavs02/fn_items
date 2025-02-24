@@ -1,0 +1,53 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # PostgreSQL xizmatini sozlash
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: myuser
+          POSTGRES_PASSWORD: mypassword
+          POSTGRES_DB: mydatabase
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    # Kodni GitHub’dan yuklab olish
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Python muhitini sozlash
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    # Bog‘liqliklarni o‘rnatish
+    - name: Install dependencies
+      working-directory: ./back
+      run: |
+        pip install -r requirements.txt
+
+    # Testlarni ishga tushirish
+    - name: Run FastAPI tests
+      working-directory: ./back
+      env:
+        PYTHONPATH: .
+        DATABASE_URL: postgresql://myuser:mypassword@localhost:5432/mydatabase
+      run: |
+        pytest tests/ -v --disable-warnings
